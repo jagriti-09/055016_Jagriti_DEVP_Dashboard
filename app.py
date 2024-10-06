@@ -129,9 +129,33 @@ col1, col2 = st.columns(2)
 # Scatter Plot for Country-wise Transaction Value
 with col1:
     st.markdown('#### Scatter Plot: Country-wise Transaction Value')
-    scatter_plot = px.scatter(df_selected_year, x='Country', y='Value', color='Category',
-                              size='Value', title="Scatter Plot of Transaction Value by Country",
-                              color_discrete_sequence=px.colors.sequential.Viridis)
+
+    # Create the scatter plot using Plotly Express
+    scatter_plot = px.scatter(
+        df_selected_year,
+        x='Country',
+        y='Value',
+        color='Category',
+        size='Value',
+        title="Scatter Plot of Transaction Value by Country",
+        color_discrete_sequence=px.colors.sequential.Viridis,
+        hover_name='Country',  # Shows country name on hover
+        size_max=60,           # Maximum size of the points
+        labels={
+            'Value': 'Transaction Value',  # Label for y-axis
+            'Country': 'Country',          # Label for x-axis
+        }
+    )
+
+    # Update layout for better visualization
+    scatter_plot.update_layout(
+        xaxis_title='Country',          # Title for x-axis
+        yaxis_title='Transaction Value', # Title for y-axis
+        legend_title='Category',        # Title for legend
+        template='plotly_white'         # Clean background
+    )
+
+    # Render the plotly chart in Streamlit
     st.plotly_chart(scatter_plot, use_container_width=True)
 
 # Box Plot for Transaction Value Distribution by variable
