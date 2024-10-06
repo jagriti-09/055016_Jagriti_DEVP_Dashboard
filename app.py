@@ -84,7 +84,7 @@ def calculate_transaction_difference(input_df, input_year):
 
 # Dashboard Main Panel
 st.markdown("<h1 style='text-align: center; color: #004d40;'>📦 Import-Export Transactions Dashboard</h1>", unsafe_allow_html=True)
-st.markdown("<h4 style='text-align: center; color: #004d40;'>Comprehensive analysis of global trade flows by year and country</h4>", unsafe_allow_html=True)
+st.markdown("<h4 style='text-align: center; color: #004d40;'>Comprehensive Analysis of Global Trade Flows</h4>", unsafe_allow_html=True)
 st.markdown("<hr>", unsafe_allow_html=True)
 
 # Display key metrics in card layout
