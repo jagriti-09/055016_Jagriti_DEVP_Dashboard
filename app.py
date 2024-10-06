@@ -126,56 +126,12 @@ st.write(insight_2)
 # Additional Graphs Section
 col1, col2 = st.columns(2)
 
-# Add filters for other variables
-# Example filters: Category and Year
-selected_categories = st.sidebar.multiselect(
-    'Select Category',
-    options=df_selected_year['Category'].unique(),
-    default=df_selected_year['Category'].unique()  # Default to all categories
-)
-
-selected_years = st.sidebar.multiselect(
-    'Select Year',
-    options=df_selected_year['Year'].unique(),
-    default=df_selected_year['Year'].unique()  # Default to all years
-)
-
-# Filter the DataFrame based on selected categories and years
-filtered_df = df_selected_year[
-    (df_selected_year['Category'].isin(selected_categories)) &
-    (df_selected_year['Year'].isin(selected_years))
-]
-
 # Scatter Plot for Country-wise Transaction Value
 with col1:
     st.markdown('#### Scatter Plot: Country-wise Transaction Value')
-    
-    # Create the scatter plot using the filtered DataFrame
-    scatter_plot = px.scatter(
-        filtered_df,
-        x='Country',
-        y='Value',
-        color='Category',
-        size='Value',
-        title="Scatter Plot of Transaction Value by Country",
-        color_discrete_sequence=px.colors.sequential.Viridis,
-        hover_name='Country',
-        size_max=60,
-        labels={
-            'Value': 'Transaction Value',
-            'Country': 'Country',
-        }
-    )
-
-    # Update layout for better visualization
-    scatter_plot.update_layout(
-        xaxis_title='Country',
-        yaxis_title='Transaction Value',
-        legend_title='Category',
-        template='plotly_white'
-    )
-
-    # Render the plotly chart in Streamlit
+    scatter_plot = px.scatter(df_selected_year, x='Country', y='Value', color='Category',
+                              size='Value', title="Scatter Plot of Transaction Value by Country",
+                              color_discrete_sequence=px.colors.sequential.Viridis)
     st.plotly_chart(scatter_plot, use_container_width=True)
 
 # Box Plot for Transaction Value Distribution by variable
