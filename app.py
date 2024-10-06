@@ -126,33 +126,53 @@ st.write(insight_2)
 # Additional Graphs Section
 col1, col2 = st.columns(2)
 
+# Add filters for other variables
+# Example filters: Category and Year
+selected_categories = st.sidebar.multiselect(
+    'Select Category',
+    options=df_selected_year['Category'].unique(),
+    default=df_selected_year['Category'].unique()  # Default to all categories
+)
+
+selected_years = st.sidebar.multiselect(
+    'Select Year',
+    options=df_selected_year['Year'].unique(),
+    default=df_selected_year['Year'].unique()  # Default to all years
+)
+
+# Filter the DataFrame based on selected categories and years
+filtered_df = df_selected_year[
+    (df_selected_year['Category'].isin(selected_categories)) &
+    (df_selected_year['Year'].isin(selected_years))
+]
+
 # Scatter Plot for Country-wise Transaction Value
 with col1:
     st.markdown('#### Scatter Plot: Country-wise Transaction Value')
-
-    # Create the scatter plot using Plotly Express
+    
+    # Create the scatter plot using the filtered DataFrame
     scatter_plot = px.scatter(
-        df_selected_year,
+        filtered_df,
         x='Country',
         y='Value',
         color='Category',
         size='Value',
         title="Scatter Plot of Transaction Value by Country",
         color_discrete_sequence=px.colors.sequential.Viridis,
-        hover_name='Country',  # Shows country name on hover
-        size_max=60,           # Maximum size of the points
+        hover_name='Country',
+        size_max=60,
         labels={
-            'Value': 'Transaction Value',  # Label for y-axis
-            'Country': 'Country',          # Label for x-axis
+            'Value': 'Transaction Value',
+            'Country': 'Country',
         }
     )
 
     # Update layout for better visualization
     scatter_plot.update_layout(
-        xaxis_title='Country',          # Title for x-axis
-        yaxis_title='Transaction Value', # Title for y-axis
-        legend_title='Category',        # Title for legend
-        template='plotly_white'         # Clean background
+        xaxis_title='Country',
+        yaxis_title='Transaction Value',
+        legend_title='Category',
+        template='plotly_white'
     )
 
     # Render the plotly chart in Streamlit
