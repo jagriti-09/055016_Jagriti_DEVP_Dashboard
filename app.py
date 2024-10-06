@@ -168,4 +168,4 @@ st.altair_chart(line_chart, use_container_width=True)
 
 # Footer
 st.markdown("<hr>", unsafe_allow_html=True)
-st.markdown("##### Created by Your Name | Import-Export Dashboard © 2024", unsafe_allow_html=True)
+st.markdown("##### Created by Jagriti | Import-Export Dashboard © 2024", unsafe_allow_html=True)
