@@ -126,62 +126,45 @@ st.write(insight_2)
 # Additional Graphs Section
 col1, col2 = st.columns(2)
 
+# Change 1: Scatter Plot for Country-wise Transaction Value
 with col1:
-    st.markdown('#### Top 10 Countries by Transaction Value')
-    
-    # Bar chart for top countries
-    top_10_countries = df_selected_year.groupby('Country')['Value'].sum().reset_index().sort_values(by='Value', ascending=False).head(10)
-    bar_chart = alt.Chart(top_10_countries).mark_bar().encode(
-        x=alt.X('Value:Q', title='Transaction Value'),
-        y=alt.Y('Country:N', sort='-x', title='Country'),
-        color=alt.Color('Country:N', scale=alt.Scale(scheme=selected_color_theme))
-    ).properties(width=600, height=400)
-    st.altair_chart(bar_chart, use_container_width=True)
+    st.markdown('#### Scatter Plot: Country-wise Transaction Value')
+    scatter_plot = px.scatter(df_selected_year, x='Country', y='Value', color='Category',
+                              size='Value', title="Scatter Plot of Transaction Value by Country",
+                              color_discrete_sequence=px.colors.sequential.Viridis)
+    st.plotly_chart(scatter_plot, use_container_width=True)
 
+# Change 2: Box Plot for Transaction Value Distribution
 with col2:
-    st.markdown('#### Transactions Over Time')
+    st.markdown('#### Box Plot: Transaction Value Distribution by Category')
+    box_plot = px.box(df_selected_year, x='Category', y='Value', color='Category',
+                      title="Transaction Value Distribution by Category",
+                      color_discrete_sequence=px.colors.sequential.Turbo)
+    st.plotly_chart(box_plot, use_container_width=True)
 
-# Line chart for transactions over time
+st.markdown("<hr>", unsafe_allow_html=True)
+
+# Change 3: Donut Chart for Value Distribution by Category
+st.markdown('#### Donut Chart for Value Distribution by Category')
+donut_chart = px.pie(df_selected_year, values='Value', names='Category', hole=0.4,
+                     title="Value Distribution by Category", color_discrete_sequence=px.colors.sequential.RdBu)
+st.plotly_chart(donut_chart, use_container_width=True)
+
+# Change 4: Treemap for Country and Category Breakdown
+st.markdown('#### Treemap: Category and Country Breakdown')
+treemap_chart = px.treemap(df_selected_year, path=['Category', 'Country'], values='Value',
+                           title='Treemap: Category and Country Breakdown',
+                           color_discrete_sequence=px.colors.sequential.Plasma)
+st.plotly_chart(treemap_chart, use_container_width=True)
+
+# Change 5: Line Chart for Transactions Over Time (Remains unchanged)
+st.markdown('#### Transactions Over Time')
 line_chart = alt.Chart(df_selected_year).mark_line().encode(
     x=alt.X('Date:T', axis=alt.Axis(title='Date')),
     y=alt.Y('Value:Q', axis=alt.Axis(title='Transaction Value')),
     color=alt.Color('Category:N', legend=alt.Legend(title="Category"))
-).properties(width=600, height=400)
+).properties(width=900, height=300)
 st.altair_chart(line_chart, use_container_width=True)
-
-st.markdown("<hr>", unsafe_allow_html=True)
-
-# Pie chart for value distribution by category
-st.markdown('#### Value Distribution by Category')
-pie_chart = px.pie(df_selected_year, values='Value', names='Category', title="Value Distribution by Category",
-                   color_discrete_sequence=px.colors.sequential.RdBu)
-pie_chart.update_traces(textinfo='percent+label')
-st.plotly_chart(pie_chart, use_container_width=True)
-
-# Heatmap for transactions by category over time
-st.markdown('#### Category-Wise Heatmap')
-heatmap = alt.Chart(df_selected_year).mark_rect().encode(
-    y=alt.Y('Category:O', axis=alt.Axis(title="Category")),
-    x=alt.X('Date:T', axis=alt.Axis(title="Date")),
-    color=alt.Color('Value:Q', scale=alt.Scale(scheme=selected_color_theme)),
-).properties(width=900, height=300)
-st.altair_chart(heatmap, use_container_width=True)
-
-# Stacked Area Chart
-st.markdown('#### Stacked Area Chart: Cumulative Transaction Values Over Time')
-area_chart = alt.Chart(df_selected_year).mark_area().encode(
-    x='Date:T',
-    y='Value:Q',
-    color='Category:N',
-    tooltip=['Date', 'Value']
-).properties(width=900, height=300)
-st.altair_chart(area_chart, use_container_width=True)
-
-# Sunburst Chart
-st.markdown('#### Sunburst Chart: Category and Country Breakdown')
-sunburst_chart = px.sunburst(df_selected_year, path=['Category', 'Country'], values='Value', title='Sunburst Chart: Category and Country Breakdown',
-                             color_discrete_sequence=px.colors.sequential.Plasma)
-st.plotly_chart(sunburst_chart, use_container_width=True)
 
 # Footer
 st.markdown("<hr>", unsafe_allow_html=True)
