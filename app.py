@@ -126,7 +126,7 @@ st.write(insight_2)
 # Additional Graphs Section
 col1, col2 = st.columns(2)
 
-# Change 1: Scatter Plot for Country-wise Transaction Value
+# Scatter Plot for Country-wise Transaction Value
 with col1:
     st.markdown('#### Scatter Plot: Country-wise Transaction Value')
     scatter_plot = px.scatter(df_selected_year, x='Country', y='Value', color='Category',
@@ -134,30 +134,35 @@ with col1:
                               color_discrete_sequence=px.colors.sequential.Viridis)
     st.plotly_chart(scatter_plot, use_container_width=True)
 
-# Change 2: Box Plot for Transaction Value Distribution
+# Box Plot for Transaction Value Distribution by variable
 with col2:
-    st.markdown('#### Box Plot: Transaction Value Distribution by Category')
-    box_plot = px.box(df_selected_year, x='Category', y='Value', color='Category',
-                      title="Transaction Value Distribution by Category",
+    st.markdown('#### Box Plot: Transaction Value Distribution by Variable')
+    
+    # Allow user to choose x and y for boxplot
+    variable_x = st.selectbox('Select X-axis variable', ['Category', 'Country'])
+    variable_y = st.selectbox('Select Y-axis variable', ['Value', 'Date'])
+
+    box_plot = px.box(df_selected_year, x=variable_x, y=variable_y, color=variable_x,
+                      title=f"Box Plot: {variable_y} Distribution by {variable_x}",
                       color_discrete_sequence=px.colors.sequential.Turbo)
     st.plotly_chart(box_plot, use_container_width=True)
 
 st.markdown("<hr>", unsafe_allow_html=True)
 
-# Change 3: Donut Chart for Value Distribution by Category
+# Donut Chart for Value Distribution by Category
 st.markdown('#### Donut Chart for Value Distribution by Category')
 donut_chart = px.pie(df_selected_year, values='Value', names='Category', hole=0.4,
                      title="Value Distribution by Category", color_discrete_sequence=px.colors.sequential.RdBu)
 st.plotly_chart(donut_chart, use_container_width=True)
 
-# Change 4: Treemap for Country and Category Breakdown
+# Treemap for Country and Category Breakdown
 st.markdown('#### Treemap: Category and Country Breakdown')
 treemap_chart = px.treemap(df_selected_year, path=['Category', 'Country'], values='Value',
                            title='Treemap: Category and Country Breakdown',
                            color_discrete_sequence=px.colors.sequential.Plasma)
 st.plotly_chart(treemap_chart, use_container_width=True)
 
-# Change 5: Line Chart for Transactions Over Time (Remains unchanged)
+# Line Chart for Transactions Over Time (Remains unchanged)
 st.markdown('#### Transactions Over Time')
 line_chart = alt.Chart(df_selected_year).mark_line().encode(
     x=alt.X('Date:T', axis=alt.Axis(title='Date')),
